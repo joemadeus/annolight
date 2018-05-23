@@ -1,15 +1,16 @@
 #include <bluefruit.h>
+#include "GA1A12S202.h"
 #include "LED.h"
 
 // Apple
 #define MANUFACTURER_ID 0x0040
 
 // AirLocate UUID: ba9a1262-77d7-4a2a-9677-1eac9ac9d2fe
-uint8_t beaconUuid[16] = { 
+const uint8_t beaconUuid[16] = { 
   0xBa, 0x9A, 0x12, 0x62, 0x77, 0xD7, 0x4A, 0x2A, 
   0x96, 0x77, 0x1E, 0xAC, 0x9A, 0xC9, 0xD2, 0xFE, 
 };
- 
+
 // A valid Beacon packet consists of the following information:
 // UUID, Major, Minor, RSSI @ 1M
 BLEBeacon beacon(beaconUuid, 0x0001, 0x0000, -54);
@@ -20,12 +21,8 @@ LED RedLEDs   = LED(29);
 LED GreenLEDs = LED(20);
 LED BlueLEDs  = LED(25);
 
-float rawLightRange    = 1024; // 3.3v
-float logLightRange    = 5.0; // 3.3v = 10^5 lux
-int LeftLightPinIn     = 15;
-int RightLightPinIn    = 16;
-int LeftLightLinearIn  = 0;
-int RightLightLinearIn = 0;
+GA1A12S202 LeftLightSensor  = GA1A12S202(15);
+GA1A12S202 RightLightSensor = GA1A12S202(16);
 
 int SoftOffPinIn = 17;
 
@@ -41,8 +38,6 @@ void softToggle() {
 
 void setup() {  
   // ~~~~~~~~~ PIN SETUP ~~~~~~~~~ //
-  pinMode(LeftLightPinIn,  INPUT);
-  pinMode(RightLightPinIn, INPUT);
   pinMode(BatteryPinIn,    INPUT);
 
   // ~~~~~~~~~ BLUETOOTH SETUP ~~~~~~~~~ //
@@ -87,6 +82,3 @@ void loop() {
   // output settings
 }
 
-float RawToLux(int raw) {
-  return pow(10, raw * logLightRange / rawLightRange);
-}
