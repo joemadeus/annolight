@@ -1,10 +1,10 @@
 #include "LED.h"
 
-LED::LED(byte _pin) {
+LED::LED(const byte _pin) {
   pin = _pin;
+  pinMode(pin, OUTPUT);
   on = false;
   currentPerceivedPower = 128;
-  pinMode(pin, OUTPUT);
 }
 
 LED::~LED() {
