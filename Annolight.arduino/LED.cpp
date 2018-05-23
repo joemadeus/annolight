@@ -1,6 +1,6 @@
 #include "LED.h"
 
-LED::LED(const byte _pin) {
+LED::LED(byte _pin) {
   pin = _pin;
   on = false;
   currentPerceivedPower = 128;
@@ -17,7 +17,7 @@ void LED::toggle() {
 }
 
 void LED::setPerceivedPower(uint8_t power) {
-  currentPerceivedPower = &gammaLUT[power];
+  currentPerceivedPower = pgm_read_byte(&gammaLUT[power]);
   write();
 }
 

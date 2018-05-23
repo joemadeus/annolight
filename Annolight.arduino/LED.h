@@ -6,12 +6,12 @@
 class LED {
 
   private:
-    const byte pin;
+    byte pin;
     bool on;
     uint8_t currentPerceivedPower;
     
     // (i/255) ** 2.2 * 245 + 12
-    const uint8_t PROGMEM gammaLUT[] = {
+    const uint8_t PROGMEM gammaLUT[255] = {
        12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,  12,
        12,  13,  13,  13,  13,  13,  13,  13,  13,  13,  13,  14,  14,  14,  14,
        14,  14,  15,  15,  15,  15,  15,  16,  16,  16,  16,  16,  17,  17,  17,
