@@ -1,6 +1,10 @@
 #include <bluefruit.h>
+
+#include "Battery.h"
 #include "GA1A12S202.h"
 #include "LED.h"
+
+#define ANALOG_READ_MAX 4096 // 12-bit analog reads systemwide
 
 // Apple
 #define MANUFACTURER_ID 0x0040
@@ -16,18 +20,18 @@ const uint8_t beaconUuid[16] = {
 BLEBeacon beacon(beaconUuid, 0x0001, 0x0000, -54);
 
 
-LED WhiteLEDs = LED(30);
-LED RedLEDs   = LED(29);
-LED GreenLEDs = LED(20);
-LED BlueLEDs  = LED(25);
+LED WhiteLEDs = LED(30, 128, true);
+LED RedLEDs   = LED(29,   0, false);
+LED GreenLEDs = LED(20,   0, false);
+LED BlueLEDs  = LED(25,   0, false);
 
-GA1A12S202 LeftLightSensor  = GA1A12S202(15);
-GA1A12S202 RightLightSensor = GA1A12S202(16);
+#define GA1A12S202_LOG_LUX_MAX 4.7
+GA1A12S202 LeftLightSensor  = GA1A12S202(15, ANALOG_READ_MAX, GA1A12S202_LOG_LUX_MAX);
+GA1A12S202 RightLightSensor = GA1A12S202(16, ANALOG_READ_MAX, GA1A12S202_LOG_LUX_MAX);
+
+Battery Battery1 = Battery(31, ANALOG_READ_MAX, 1200.0);
 
 int SoftOffPinIn = 17;
-
-int BatteryPinIn   = 31;
-int BatteryReading = 0;
 
 /*
  * Toggle the status of the LEDs
@@ -36,11 +40,19 @@ void softToggle() {
   
 }
 
-void setup() {  
+void setup() {
+  Serial.begin(9600);
+  analogReference(AR_INTERNAL_3_0);
+  analogReadResolution(12);
+
+  // Let the ADC settle
+  delay(1);
+
   // ~~~~~~~~~ PIN SETUP ~~~~~~~~~ //
-  pinMode(BatteryPinIn,    INPUT);
+  pinMode(SoftOffPinIn, INPUT);
 
   // ~~~~~~~~~ BLUETOOTH SETUP ~~~~~~~~~ //
+  BlueLEDs.on();
   Bluefruit.begin();
   Bluefruit.autoConnLed(false);
   
@@ -50,7 +62,10 @@ void setup() {
   beacon.setManufacturer(MANUFACTURER_ID);
 
   // Setup the advertising packet
-//  startAdv();
+  // startAdv();
+  BlueLEDs.off();
+
+  WhiteLEDs.on();
 }
 
 void startAdv(void) {

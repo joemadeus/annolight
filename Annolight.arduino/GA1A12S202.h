@@ -5,15 +5,14 @@
 
 class GA1A12S202 {
   private:
-    const float rawLightRange = 1024.0; // 3.3v
-    const float logLightRange = 5.0;    // 3.3v = 10^5 lux
     byte pin;
+    float logLuxPerLSB;
     float luxValue;
 
     float rawToLux(int raw);
 
   public:
-    GA1A12S202(const byte _pin);
+    GA1A12S202(const byte _pin, const float _analogReadMax, const float _logLightRangeMax);
     ~GA1A12S202();
     float lux();
     void update();

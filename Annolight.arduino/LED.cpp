@@ -1,10 +1,13 @@
 #include "LED.h"
 
-LED::LED(const byte _pin) {
+LED::LED(const byte _pin, uint8_t _initialPerceivedPower, bool _isInitiallyOn) {
+  Serial.print("Initializing LEDs on pin ");
+  Serial.println(_pin);
+
   pin = _pin;
   pinMode(pin, OUTPUT);
-  on = false;
-  currentPerceivedPower = 128;
+  isOn = _isInitiallyOn;
+  currentPerceivedPower = _initialPerceivedPower;
 }
 
 LED::~LED() {
@@ -12,7 +15,17 @@ LED::~LED() {
 }
 
 void LED::toggle() {
-  on = !on;
+  isOn = !isOn;
+  write();
+}
+
+void LED::on() {
+  isOn = true;
+  write();
+}
+
+void LED::off() {
+  isOn = false;
   write();
 }
 
@@ -27,6 +40,6 @@ void LED::setPower(uint8_t power) {
 }
 
 void LED::write() {
-  digitalWrite(pin, on * currentPerceivedPower);
+  digitalWrite(pin, isOn * currentPerceivedPower);
 }
 
