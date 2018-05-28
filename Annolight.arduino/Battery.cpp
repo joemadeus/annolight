@@ -1,12 +1,12 @@
 #include "Battery.h"
 
-Battery::Battery(const byte _pin, const uint _analogReadMax, const float _batteryMAH) {
+Battery::Battery(const byte _pin, const float _analogReadRefMv, const uint _analogReadMax) {
   Serial.print("Initializing battery on pin ");
   Serial.println(_pin);
 
   pin = _pin;
   pinMode(pin, INPUT);
-  mVPerLSB = _batteryMAH / _analogReadMax;
+  mVPerLSB = _analogReadRefMv / _analogReadMax;
 
   analogRead(pin);
   delay(10);
@@ -20,10 +20,10 @@ float Battery::percent() {
 }
 
 void Battery::update() {
-  int raw = analogRead(pin);
+  batteryPercent = mvToPercent(analogRead(pin));
 }
 
-uint8_t mvToPercent(float mvolts) {
+uint8_t Battery::mvToPercent(float mvolts) {
     if (mvolts >= 3000) return 100;
     else if (mvolts > 2900) return 100 - ((3000 - mvolts) * 58) / 100;
     else if (mvolts > 2740) return  42 - ((2900 - mvolts) * 24) / 160;

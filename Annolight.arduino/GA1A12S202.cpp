@@ -1,6 +1,6 @@
 #include "GA1A12S202.h"
 
-GA1A12S202::GA1A12S202(const byte _pin, const float _analogReadMax, const float _logLightRangeMax) {
+GA1A12S202::GA1A12S202(const byte _pin, const float _logLightRangeMax, const float _analogReadMax) {
   Serial.print("Initializing light sensor on pin ");
   Serial.println(_pin);
 

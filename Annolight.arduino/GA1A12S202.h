@@ -12,7 +12,7 @@ class GA1A12S202 {
     float rawToLux(int raw);
 
   public:
-    GA1A12S202(const byte _pin, const float _analogReadMax, const float _logLightRangeMax);
+    GA1A12S202(const byte _pin, const float _logLightRangeMax, const float _analogReadMax);
     ~GA1A12S202();
     float lux();
     void update();

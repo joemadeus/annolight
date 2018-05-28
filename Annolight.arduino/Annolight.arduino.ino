@@ -5,6 +5,7 @@
 #include "LED.h"
 
 #define ANALOG_READ_MAX 4096 // 12-bit analog reads systemwide
+#define ANALOG_READ_REF_MV 3000.0 // 3.0v internal analog reference
 
 // Apple
 #define MANUFACTURER_ID 0x0040
@@ -26,18 +27,20 @@ LED GreenLEDs = LED(20,   0, false);
 LED BlueLEDs  = LED(25,   0, false);
 
 #define GA1A12S202_LOG_LUX_MAX 4.7
-GA1A12S202 LeftLightSensor  = GA1A12S202(15, ANALOG_READ_MAX, GA1A12S202_LOG_LUX_MAX);
-GA1A12S202 RightLightSensor = GA1A12S202(16, ANALOG_READ_MAX, GA1A12S202_LOG_LUX_MAX);
+GA1A12S202 LeftLightSensor  = GA1A12S202(A0, GA1A12S202_LOG_LUX_MAX, ANALOG_READ_MAX);
+GA1A12S202 RightLightSensor = GA1A12S202(A1, GA1A12S202_LOG_LUX_MAX, ANALOG_READ_MAX);
 
-Battery Battery1 = Battery(31, ANALOG_READ_MAX, 1200.0);
+Battery Battery1 = Battery(A7, ANALOG_READ_REF_MV, ANALOG_READ_MAX);
 
 int SoftOffPinIn = 17;
 
 /*
- * Toggle the status of the LEDs
+ * Toggle the status of thenwhite LEDs. The RGB indicator LEDs are left alone
+ * since they indicate that something has to change.
  */
 void softToggle() {
-  
+  Serial.println("toggling");
+  WhiteLEDs.toggle();
 }
 
 void setup() {
@@ -49,9 +52,12 @@ void setup() {
   delay(1);
 
   // ~~~~~~~~~ PIN SETUP ~~~~~~~~~ //
-  pinMode(SoftOffPinIn, INPUT);
+  Serial.println("attach softoff pin interrupt");
+  pinMode(SoftOffPinIn, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(SoftOffPinIn), softToggle, FALLING);
 
   // ~~~~~~~~~ BLUETOOTH SETUP ~~~~~~~~~ //
+  Serial.println("bluetooth setup");
   BlueLEDs.on();
   Bluefruit.begin();
   Bluefruit.autoConnLed(false);
@@ -69,6 +75,7 @@ void setup() {
 }
 
 void startAdv(void) {
+  Serial.println("bluetooth advertising setup");
   // Advertising packet
   // Set the beacon payload using the BLEBeacon class populated earlier
   Bluefruit.Advertising.setBeacon(beacon);
