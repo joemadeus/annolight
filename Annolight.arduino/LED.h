@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+#define LED_MAX_PERCEIVED_POWER 255
+
 class LED {
 
   private:

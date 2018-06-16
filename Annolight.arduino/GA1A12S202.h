@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+#define GA1A12S202_LOG_LUX_MAX 4.7
+
 class GA1A12S202 {
   private:
     byte pin;
