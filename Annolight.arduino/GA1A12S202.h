@@ -9,13 +9,14 @@ class GA1A12S202 {
   private:
     byte pin;
     float logLuxPerLSB;
-    float luxValue;
+    int rawValue;
 
     float rawToLux(int raw);
 
   public:
     GA1A12S202(const byte _pin, const float _logLightRangeMax, const float _analogReadMax);
     ~GA1A12S202();
+    int raw();
     float lux();
     void update();
 };

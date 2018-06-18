@@ -37,6 +37,7 @@ class LED {
   public:
     LED(const byte _pin, uint8_t _initialPerceivedPower, bool _isInitiallyOn);
     ~LED();
+    void start();
     void toggle();
     void on();
     void off();

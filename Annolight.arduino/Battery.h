@@ -10,7 +10,7 @@
 class Battery {
 
   float mVPerLSB;
-  float batteryPercent;
+  float batteryMv;
   byte pin;
 
   uint8_t mvToPercent(float mvolts);
@@ -18,6 +18,7 @@ class Battery {
   public:
     Battery(const byte _pin, const float _analogReadRefMv, const uint _analogReadMax);
     ~Battery();
+    float mV();
     float percent();
     void update();
 };
