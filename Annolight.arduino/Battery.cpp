@@ -26,7 +26,7 @@ float Battery::percent() {
 }
 
 void Battery::update() {
-  batteryMv = (float)analogRead(pin) * VBAT_MV_PER_LSB * VBAT_DIVIDER_COMP;
+  batteryMv = (float)analogRead(pin) * VBAT_MV_PER_LSB;
 }
 
 uint8_t Battery::mvToPercent(float mvolts) {
