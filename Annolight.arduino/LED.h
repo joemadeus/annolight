@@ -9,7 +9,7 @@ class LED {
 
   private:
     byte pin;
-    bool isOn;
+    bool ledsOn;
     uint8_t currentPerceivedPower;
 
     // (i/255) ** 2.2 * 245 + 12
@@ -37,12 +37,12 @@ class LED {
   public:
     LED(const byte _pin, uint8_t _initialPerceivedPower, bool _isInitiallyOn);
     ~LED();
-    void start();
     void toggle();
     void on();
     void off();
     void setPerceivedPower(uint8_t power);
     void setPower(uint8_t power);
+    bool isOn();
 };
 
 #endif
