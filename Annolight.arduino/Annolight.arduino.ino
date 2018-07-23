@@ -48,8 +48,14 @@ void onSoftoffButton() {
     lastButt = now;
     WhiteLEDs->toggle();
     if (WhiteLEDs->isOn()) {
-      if (Serial) Serial.println("toggle advertising");
+      // Start advertising if the light was just turned on. Easier to do than
+      // trying to create a "dual purpose" button with long presses, &c
       startAdvertisingToggle = true;
+      // If the light was just turned on but there's not enough power to really
+      // show that it's on, set a reasonable brightness
+      if (WhiteLEDs->getPerceivedPower() < 5) {
+        WhiteLEDs->setPerceivedPower(64);
+      }
     }
   }
 }
@@ -59,10 +65,17 @@ void onSoftoffButton() {
  * ~~~~~~~~~~~~~~~~~~~
  */
 #define BLUETOOTH_NAME "Annolight"
+#define MANUFACTURER_ID 0x0059
+// 27fdf34a-5d09-4f85-9a03-6fba63f1a41c
+uint8_t beaconUuid[16] = {
+  0x27, 0xfd, 0xf3, 0x4a, 0x5d, 0x09, 0x4f, 0x85,
+  0x9a, 0x03, 0x6f, 0xba, 0x63, 0xf1, 0xa4, 0x1c
+};
 
-BLEDis  bledis;  // Discovery service
-BLEUart bleuart; // Peripheral uart service handles commands from the client
-BLEBas  blebas;  // Peripheral battery service
+BLEDis    bledis;  // Discovery service
+BLEUart   bleuart; // Peripheral uart service handles commands from the client
+BLEBas    blebas;  // Peripheral battery service
+BLEBeacon beacon(beaconUuid, 0x0001, 0x0000, -54);
 
 void onBluetoothConnect(uint16_t conn_handle) {
   char central_name[32] = { 0 };
@@ -141,6 +154,9 @@ void setup() {
   analogReference(AR_INTERNAL_3_0);
   analogReadResolution(12);
 
+  PSELP=0
+  
+
   // Let the ADC settle
   delay(100);
 
@@ -190,6 +206,8 @@ void setup() {
   Bluefruit.Advertising.setInterval(32, 244);    // in unit of 0.625 ms
   Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
   Bluefruit.Advertising.addService(bleuart);
+  beacon.setManufacturer(MANUFACTURER_ID);
+  Bluefruit.Advertising.setBeacon(beacon);
 
   // Start advertising on startup
   advertiseStart();
@@ -204,7 +222,6 @@ void setup() {
 
   WhiteLEDs->on();
 }
-
 
 void commandSetBrightness() {
   if (Serial) Serial.println("Command: Set brightness");
@@ -257,7 +274,7 @@ void sendResponse(char const *response) {
  * ~~~~~~~~~~~~~~~~~~~
  */
 long previousMillis = 0;
-const long interval = 30000;
+const long interval = 5000;
 void loop() {
   // wait for the signal to start advertising again
   if (startAdvertisingToggle) advertiseStart();

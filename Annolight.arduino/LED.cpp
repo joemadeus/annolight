@@ -19,6 +19,10 @@ void LED::toggle() {
   write();
 }
 
+bool LED::isOn() {
+  return ledsOn;
+}
+
 void LED::on() {
   ledsOn = true;
   write();
@@ -29,6 +33,10 @@ void LED::off() {
   write();
 }
 
+uint8_t LED::getPerceivedPower() {
+  return currentPerceivedPower;
+}
+
 void LED::setPerceivedPower(uint8_t power) {
   currentPerceivedPower = power;
   write();
@@ -37,10 +45,6 @@ void LED::setPerceivedPower(uint8_t power) {
 void LED::setPower(uint8_t power) {
   currentPerceivedPower = pgm_read_byte(&gammaLUT[power]);
   write();
-}
-
-bool LED::isOn() {
-  return ledsOn;
 }
 
 void LED::write() {

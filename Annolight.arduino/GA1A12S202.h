@@ -9,7 +9,7 @@ class GA1A12S202 {
   private:
     byte pin;
     float logLuxPerLSB;
-    int rawValue;
+    int rawValue; // 0..4095
 
     float rawToLux(int raw);
 
