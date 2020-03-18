@@ -109,7 +109,7 @@ void advertiseStart(void) {
   }
 
   if (Serial) Serial.println("bluetooth advertising start");
-  Bluefruit.Advertising.start(0); // 0 = Don't stop advertising
+//  Bluefruit.Advertising.start(0); // 0 = Don't stop advertising
 }
 
 void onBleUartReceive() {
@@ -154,7 +154,7 @@ void setup() {
   analogReference(AR_INTERNAL_3_0);
   analogReadResolution(12);
 
-  PSELP=0
+//  PSELP=0
   
 
   // Let the ADC settle

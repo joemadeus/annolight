@@ -1,0 +1,10 @@
+ANNOLIGHT APP:
+* Image of the side plate showing current brightness
+* Vertical slider to the side of the image plate to control brightness (slider)
+* Mode selection (party, on, off) (two switches)
+* Disregard light sensors (one switch)
+* Battery graphic
+* Light sensor graphic
+* Temperature graphic
+* Disconnect button (button)
+* "Important" status line

@@ -1,0 +1,55 @@
+Peripheral ID:27041b71495d49629d6bec53fbc9c3c5, NAME:()
+  Local Name        = Annolight
+  TX Power Level    = 0
+  Manufacturer Data = []
+  Service Data      = []
+
+Connected
+Failed to set MTU, err: Not implemented
+Service: 000015301212efde1523785feabcd123
+  Characteristic  000015321212efde1523785feabcd123
+    properties    writeWithoutResponse
+  Characteristic  000015311212efde1523785feabcd123
+    properties    write notify
+  Descriptor      2902 (Client Characteristic Configuration)
+    value         0000 | "\x00\x00"
+  Characteristic  000015341212efde1523785feabcd123
+    properties    read
+    value         0100 | "\x01\x00"
+
+Service: 180a (Device Information)
+  Characteristic  2a24 (Model Number String)
+    properties    read
+    value         426c7565667275697420466561746865723532 | "Bluefruit Feather52"
+  Characteristic  2a25 (Serial Number String)
+    properties    read
+    value         32343132313942373037363335413243 | "241219B707635A2C"
+  Characteristic  2a26 (Firmware Revision String)
+    properties    read
+    value         5331333220322e302e312c20302e352e30206475616c2062616e6b73 | "S132 2.0.1, 0.5.0 dual banks"
+  Characteristic  2a28 (Software Revision String)
+    properties    read
+    value         302e382e33 | "0.8.3"
+  Characteristic  2a29 (Manufacturer Name String)
+    properties    read
+    value         416461667275697420496e6475737472696573 | "Adafruit Industries"
+
+Service: 6e400001b5a3f393e0a9e50e24dcca9e
+  Characteristic  6e400003b5a3f393e0a9e50e24dcca9e
+    properties    notify
+  Descriptor      2902 (Client Characteristic Configuration)
+    value         0000 | "\x00\x00"
+  Descriptor      2901 (Characteristic User Description)
+    value         545844 | "TXD"
+  Characteristic  6e400002b5a3f393e0a9e50e24dcca9e
+    properties    writeWithoutResponse write
+  Descriptor      2901 (Characteristic User Description)
+Failed to read descriptor, err: read not permitted
+
+Service: 180f (Battery Service)
+  Characteristic  2a19 (Battery Level)
+    properties    read notify
+    value         55 | "U"
+  Descriptor      2902 (Client Characteristic Configuration)
+    value         0000 | "\x00\x00"
+
